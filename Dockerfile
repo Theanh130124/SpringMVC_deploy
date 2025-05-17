@@ -1,23 +1,14 @@
-# Dùng base image có JDK 23
-FROM eclipse-temurin:23-jdk
+# Dùng Tomcat 11 kèm JDK 21
+FROM tomcat:11-jdk21
 
-# Cài curl và tar để tải Tomcat
-RUN apt-get update && apt-get install -y curl tar
+# Xóa các ứng dụng mặc định để tránh bị lẫn
+RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Tạo thư mục cài đặt Tomcat
-WORKDIR /opt
+# Copy WAR của bạn và đổi tên thành ROOT.war để chạy tại http://localhost:8080/
+COPY target/SpringMVC_Health_Schedule-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
 
-# Tải và giải nén Tomcat 11.0.7
-RUN curl -O https://downloads.apache.org/tomcat/tomcat-11/v11.0.7/bin/apache-tomcat-11.0.7.tar.gz && \
-    tar -xvzf apache-tomcat-11.0.7.tar.gz && \
-    rm apache-tomcat-11.0.7.tar.gz && \
-    mv apache-tomcat-11.0.7 tomcat
-
-# Sao chép WAR vào Tomcat
-COPY target/SpringMVC_Health_Schedule-1.0-SNAPSHOT.war /opt/tomcat/webapps/ROOT.war
-
-# Mở port 8080
+# Mở cổng 8080
 EXPOSE 8080
 
-# Khởi chạy Tomcat
-CMD ["/opt/tomcat/bin/catalina.sh", "run"]
+# Chạy Tomcat
+CMD ["catalina.sh", "run"]
