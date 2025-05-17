@@ -45,7 +45,7 @@ public class HibernateConfigs {
         DriverManagerDataSource dataSource
                 = new DriverManagerDataSource();
         dataSource.setDriverClassName(
-                env.getProperty("hibernate.connection.driverClass"));
+                env.getProperty("hibernate.connection.driver_class"));
         dataSource.setUrl(env.getProperty("hibernate.connection.url"));
         dataSource.setUsername(
                 env.getProperty("hibernate.connection.username"));
